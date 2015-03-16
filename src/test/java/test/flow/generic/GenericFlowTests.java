@@ -12,15 +12,15 @@ import test.flow.support.FlowBuilder;
 
 public class GenericFlowTests {
 
-	private enum Status {
+	protected enum Status {
 		OPEN, ACCEPTED, REJECTED, CLOSED;
 	}
 
-	private enum Action {
+	protected enum Action {
 		SUCCESS, FAILURE;
 	}
 
-	private static class Item {
+	protected static class Item {
 
 		private Status status = Status.OPEN;
 

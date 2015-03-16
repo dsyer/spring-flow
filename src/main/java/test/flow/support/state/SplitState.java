@@ -42,7 +42,7 @@ public class SplitState<T, S> extends AbstractState<T, S> {
 
 	private TaskExecutor taskExecutor = new SyncTaskExecutor();
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SplitAggregator<S> aggregator = new MaxValueSplitAggregator();
 
 	private final SplitAdapter<T, S> adapter;

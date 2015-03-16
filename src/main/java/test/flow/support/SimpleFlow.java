@@ -36,13 +36,12 @@ import test.flow.FlowExecutionException;
 import test.flow.FlowResult;
 
 /**
- * A {@link Flow} implementation that branches conditionally depending on the
- * exit status of the last {@link State}. The input parameters to build a flow
- * are the state transitions (in no particular order). The start state can be
- * specified explicitly (and must exist in the set of transitions), or computed
- * from the existing transitions, if unambiguous. The {@link FlowResult}
- * contains a memento for resuming a flow which is the name of the last state
- * handled.
+ * A {@link Flow} implementation that branches conditionally depending on the exit status
+ * of the last {@link State}. The input parameters to build a flow are the state
+ * transitions (in no particular order). The start state can be specified explicitly (and
+ * must exist in the set of transitions), or computed from the existing transitions, if
+ * unambiguous. The {@link FlowResult} contains a memento for resuming a flow which is the
+ * name of the last state handled.
  * 
  * @author Dave Syer
  * 
@@ -89,8 +88,8 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	}
 
 	/**
-	 * Public setter for the stateTransitions. If there is any ambiguity about
-	 * the start state, the first state in the first transition is used.
+	 * Public setter for the stateTransitions. If there is any ambiguity about the start
+	 * state, the first state in the first transition is used.
 	 * @param transitions the stateTransitions to set
 	 */
 	public void setTransitions(List<Transition<T, S>> transitions) {
@@ -119,7 +118,8 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	/**
 	 * @see Flow#resume(T, S)
 	 */
-	public FlowResult<T, S> resume(Object memento, T context, S event) throws FlowExecutionException {
+	public FlowResult<T, S> resume(Object memento, T context, S event)
+			throws FlowExecutionException {
 
 		if (startState == null) {
 			initializeTransitions();
@@ -150,20 +150,21 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	}
 
 	/**
-	 * A collection of flow event names that trigger transitions from this
-	 * state. A single wildcard ("*") is replaced with a suitable concrete
-	 * alternative.
+	 * A collection of flow event names that trigger transitions from this state (not
+	 * necessarily exhaustive, but sufficient for clients to explore the structure of the
+	 * flow). A single wildcard ("*") is replaced with a suitable concrete alternative.
 	 * 
 	 * @see #getConcretePatternForWildcard(Collection)
 	 * @see Flow#getTriggers(String)
 	 */
-	public Collection<String> getTriggers(String stateName) throws FlowDefinitionException {
+	public Collection<String> getTriggers(String stateName)
+			throws FlowDefinitionException {
 
 		Set<Transition<T, S>> set = transitionMap.get(stateName);
 
 		if (set == null) {
-			throw new FlowDefinitionException(String.format("No transitions found in flow=%s for state=%s", getName(),
-					stateName));
+			throw new FlowDefinitionException(String.format(
+					"No transitions found in flow=%s for state=%s", getName(), stateName));
 		}
 
 		Set<String> triggers = new HashSet<String>();
@@ -196,16 +197,14 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	}
 
 	/**
-	 * Convenience method to generate a concrete event name for a single
-	 * wildcard, but not repeating anything already on the list. Begins by using
-	 * well-known constants from {@link FlowEvent}, and when those run out just
-	 * returns a trigger of the form <code>ANYTHING[n]</code> where
-	 * <code>[n]</code> starts blank and then increments as an integer until a
-	 * unique event is found.
+	 * Convenience method to generate a concrete event name for a single wildcard, but not
+	 * repeating anything already on the list. Begins by using well-known constants from
+	 * {@link FlowEvent}, and when those run out just returns a trigger of the form
+	 * <code>ANYTHING[n]</code> where <code>[n]</code> starts blank and then increments as
+	 * an integer until a unique event is found.
 	 * 
 	 * @param triggers the current candidate trigger list
-	 * @return a replacement for a single wildcard not already in the candidate
-	 * list
+	 * @return a replacement for a single wildcard not already in the candidate list
 	 */
 	protected String getConcretePatternForWildcard(Collection<String> triggers) {
 		Collection<String> standards = Arrays.asList("COMPLETED", "FAILED", "UNKNOWN");
@@ -235,7 +234,8 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	 * @return a token for the execution when it pauses or ends
 	 * @throws FlowExecutionException
 	 */
-	private FlowResult<T, S> handle(State<T, S> state, T context) throws FlowExecutionException {
+	private FlowResult<T, S> handle(State<T, S> state, T context)
+			throws FlowExecutionException {
 
 		String stateName = state.getName();
 
@@ -251,8 +251,8 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 				event = state.handle(context);
 			}
 			catch (Exception e) {
-				throw new FlowExecutionException(String.format("Ended flow=%s at state=%s with exception", name,
-						stateName), e);
+				throw new FlowExecutionException(String.format(
+						"Ended flow=%s at state=%s with exception", name, stateName), e);
 			}
 
 			pause = state.isPause();
@@ -271,14 +271,15 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 	 * @return the next {@link State} (or null if this is the end)
 	 * @throws JobExecutionException
 	 */
-	private State<T, S> nextState(State<T, S> state, S event) throws FlowExecutionException {
+	private State<T, S> nextState(State<T, S> state, S event)
+			throws FlowExecutionException {
 
 		String stateName = state.getName();
 		Set<Transition<T, S>> set = transitionMap.get(stateName);
 
 		if (set == null) {
-			throw new FlowExecutionException(String.format("No transitions found in flow=%s for state=%s", getName(),
-					stateName));
+			throw new FlowExecutionException(String.format(
+					"No transitions found in flow=%s for state=%s", getName(), stateName));
 		}
 
 		String next = null;
@@ -295,20 +296,21 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 
 		if (next == null) {
 			throw new FlowExecutionException(String.format(
-					"Next state not found in flow=%s for step=%s with exit status=%s", getName(), stateName, event));
+					"Next state not found in flow=%s for step=%s with exit status=%s",
+					getName(), stateName, event));
 		}
 
 		// This should not happen if initializeTransitions is called
-		Assert.state(stateMap.containsKey(next), String.format("Next state not specified in flow=%s for next=%s",
-				getName(), next));
+		Assert.state(stateMap.containsKey(next), String.format(
+				"Next state not specified in flow=%s for next=%s", getName(), next));
 
 		return stateMap.get(next);
 
 	}
 
 	/**
-	 * Analyse the transitions provided and generate all the information needed
-	 * to execute the flow.
+	 * Analyse the transitions provided and generate all the information needed to execute
+	 * the flow.
 	 */
 	private void initializeTransitions() {
 
@@ -335,7 +337,8 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 				String next = stateTransition.getNext();
 
 				if (!stateMap.containsKey(next)) {
-					throw new IllegalArgumentException("Missing State for [" + stateTransition + "]");
+					throw new IllegalArgumentException("Missing State for ["
+							+ stateTransition + "]");
 				}
 
 			}
@@ -371,9 +374,11 @@ public class SimpleFlow<T, S> implements Flow<T, S>, StateLocator<T, S> {
 			State<T, S> state = stepTransition.getState();
 			if (!nextStateNames.contains(state.getName())) {
 				if (startState != null && !startState.getName().equals(state.getName())) {
-					throw new IllegalArgumentException(String.format("Multiple possible start steps found: [%s, %s].  "
-							+ "Please specify one explicitly with the startStateName property.", startState.getName(),
-							state.getName()));
+					throw new IllegalArgumentException(
+							String.format(
+									"Multiple possible start steps found: [%s, %s].  "
+											+ "Please specify one explicitly with the startStateName property.",
+									startState.getName(), state.getName()));
 				}
 				startState = state;
 			}

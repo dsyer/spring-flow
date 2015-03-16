@@ -9,6 +9,7 @@ import org.springframework.core.NestedRuntimeException;
  * @author Dave Syer
  * 
  */
+@SuppressWarnings("serial")
 public class FlowDefinitionException extends NestedRuntimeException {
 
 	/**

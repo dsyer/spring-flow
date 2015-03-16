@@ -78,7 +78,7 @@ public class FlowBuilder<T, S> {
 		}
 
 		if (state != null) {
-			transitions.add(Transition.create(state, matcher, next.getName()));
+			to(next);
 		}
 
 		if (matcher == null) {

@@ -27,8 +27,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import test.flow.FlowResult;
 import test.flow.FlowExecutionException;
+import test.flow.FlowResult;
 import test.flow.support.state.AbstractState;
 import test.flow.support.state.PauseAdapter;
 import test.flow.support.state.PauseState;
@@ -60,7 +60,7 @@ public class SimpleFlowTests {
 		flow.setTransitions(collect(Transition.create(new StubState("step"), "FAILED", "step"),
 				Transition.createEnd(new StubState("step"))));
 		flow.afterPropertiesSet();
-		assertEquals("FAILED", flow.getTriggers("step").iterator().next());
+		assertTrue(flow.getTriggers("step").contains("FAILED"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

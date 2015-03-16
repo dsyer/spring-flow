@@ -19,6 +19,7 @@ package test.flow;
  * @author Dave Syer
  *
  */
+@SuppressWarnings("serial")
 public class FlowExecutionException extends Exception {
 
 	/**

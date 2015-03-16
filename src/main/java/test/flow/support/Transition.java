@@ -187,7 +187,7 @@ public class Transition<T, S> implements Comparable<Transition<T, S>> {
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Transition))
 			return false;
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		Transition other = (Transition) obj;
 		return (other.state == null ? "" : other.state.getName()).equals(state == null ? "" : state.getName())
 				&& other.matcher.equals(matcher) && (next == null ? other.next == null : next.equals(other.next));
